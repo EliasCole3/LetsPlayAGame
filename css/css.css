@@ -1,0 +1,12 @@
+.world-cell{
+  width: 30px;
+  height: 30px;
+}
+
+.even-cell {
+  background-color: white;
+}
+
+.odd-cell {
+  background-color: black;
+}
