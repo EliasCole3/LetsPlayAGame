@@ -13,8 +13,8 @@ Add collision detection
 $(function() {
 
   //create a world with a width of 12 and a height of 12
-  var smallWorld = new constructors.World(12, 12, "world1");
-  // var smallWorld = new constructors.World(12, 12, "world2");
+  // var smallWorld = new constructors.World(12, 12, "world1");
+  var smallWorld = new constructors.World(12, 12, "world2");
   // var smallWorld = new constructors.World(12, 12, "world3");
   smallWorld.showWorld();
   
