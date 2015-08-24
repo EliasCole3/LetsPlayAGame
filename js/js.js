@@ -16,21 +16,23 @@ $(function() {
   // var smallWorld = new constructors.World(12, 12, "world1");
   var smallWorld = new constructors.World(12, 12, "world2");
   // var smallWorld = new constructors.World(12, 12, "world3");
+  
+  //add a table to the webpage that represents the world 
   smallWorld.showWorld();
   
   var largeWorld = new constructors.World(15, 15, "notsoBlah");
   
   //write out to dev console
-  console.log(smallWorld);
-  console.log(largeWorld);
+  // console.log(smallWorld);
+  // console.log(largeWorld);
   
+  // smallWorld.getWorld();
 
 });
 
 //all the constructors
 var constructors = {
   
-  //adding properties
   World: function(width, height, type) {
     this.width = width;
     this.height = height;
@@ -47,71 +49,63 @@ var constructors = {
       this.worldFillCharacter = ":D";
     }
     
+    
+    this.createWorld = function() {
+      var array2d = new Array(this.width);
+      
+      for(var i = 0; i < array2d.length; i++) {
+        array2d[i] = new Array(this.height);
+      }
+      
+      this.world = array2d;
+    };
+    
+    this.getWorld = function() {
+      console.log("World: " + this.width + " " + this.height);
+    };
+    
+    this.showWorld = function() {
+      for(var i = 0; i < this.width; i++) {
+        for(var j = 0; j < this.height; j++) {
+          this.world[i][j] = this.worldFillCharacter;
+        }
+      }
+      
+      var htmlString = "";
+      htmlString += "<table>";
+      
+      this.world.forEach(function(column) {
+        htmlString += "<tr>";
+        column.forEach(function(cell) {
+          htmlString += "<td class='world-cell'>" + cell + "</td>";
+        });
+        htmlString += "</tr>";
+      });
+      
+      htmlString += "</table>";
+      $("#put-world-here").html(htmlString);
+    };
+    
+    
     this.createWorld();
   },
   
   Fish: function(type) {
     this.type = type;
+    
+    //swim method for the fish constructor
+    this.swim = function() {
+      
+    };
+    
   },
 
   Rock: function(type) {
     this.type = type;
-  },
+  }
   
   
-};
-
-//adding methods
-(function() {
-  
-  constructors.World.prototype.getWorld = function() {
-    console.log("World: " + this.width + " " + this.height);
-  };
-
-  constructors.World.prototype.showWorld = function() {
-
-    for(var i = 0; i < this.width; i++) {
-      for(var j = 0; j < this.height; j++) {
-        this.world[i][j] = this.worldFillCharacter;
-      }
-    }
-
-    var htmlString = "";
-    
-    // htmlString += "<table class='table-condensed'>";
-    htmlString += "<table>";
-    
-    this.world.forEach(function(column) {
-      htmlString += "<tr>";
-      column.forEach(function(cell) {
-        htmlString += "<td class='world-cell'>" + cell + "</td>";
-      });
-      htmlString += "</tr>";
-    });
-    
-    
-    htmlString += "</table>";
-    
-    $("#put-world-here").html(htmlString);
-
-  };
-
-
-  constructors.World.prototype.createWorld = function() {
-    var array2d = new Array(this.width);
-    
-    for(var i = 0; i < array2d.length; i++) {
-      array2d[i] = new Array(this.height);
-    }
-    
-    this.world = array2d;
-  };
-  
-  constructors.Fish.prototype.swim = function() {
-    //??
-  };
-  
-})();
+}; //end of constructors
 
 var helpers = {
   
