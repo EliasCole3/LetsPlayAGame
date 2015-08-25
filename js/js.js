@@ -12,15 +12,14 @@ Add collision detection
 //when the page loads
 $(function() {
 
-  //create a world with a width of 12 and a height of 12
-  var smallWorld = new constructors.World(12, 12, "world1");
-  // var smallWorld = new constructors.World(12, 12, "world2");
+  //create a world with a height of 12 and a width of 12
+  // var smallWorld = new constructors.World(12, 12, "world1");
+  var smallWorld = new constructors.World(15, 15, "world2");
   // var smallWorld = new constructors.World(12, 12, "world3");
   
   //add a table to the webpage that represents the world 
   smallWorld.showWorld();
   
-  var largeWorld = new constructors.World(15, 15, "notsoBlah");
   
   //write out to dev console
   // console.log(smallWorld);
@@ -33,7 +32,7 @@ $(function() {
 //all the constructors
 var constructors = {
   
-  World: function(width, height, type) {
+  World: function(height, width, type) {
     this.width = width;
     this.height = height;
     this.type = type;
@@ -51,33 +50,53 @@ var constructors = {
     
     
     this.createWorld = function() {
-      var array2d = new Array(this.width);
+      var array2d = new Array(this.height);
       
       for(var i = 0; i < array2d.length; i++) {
-        array2d[i] = new Array(this.height);
+        array2d[i] = new Array(this.width);
       }
       
       this.world = array2d;
     };
     
     this.getWorld = function() {
-      console.log("World: " + this.width + " " + this.height);
     };
     
     this.showWorld = function() {
-      for(var i = 0; i < this.width; i++) {
-        for(var j = 0; j < this.height; j++) {
-          this.world[i][j] = this.worldFillCharacter;
-        }
-      }
       
+      var ranNum = 0;
+      for(var i = 0; i < this.height; i++) {
+        for(var j = 0; j < this.width; j++) {
+
+          if( i > height - 3) {
+            this.world[i][j] = new constructors.Rock("normal", "#");
+          }
+            else if( j < width && ranNum == 1) {
+              this.world[i][j] = new constructors.Fish("Betta", "G");
+            }
+            else {
+            this.world[i][j] = new constructors.Water("water", " ");
+          }
+
+          
+        }
+        ranNum = Math.floor((Math.random() * 3) + 1);
+
+
+
+      }
+        
       var htmlString = "";
       htmlString += "<table>";
       
+      
+      
       this.world.forEach(function(column) {
         htmlString += "<tr>";
-        column.forEach(function(cell) {
-          htmlString += "<td class='world-cell'>" + cell + "</td>";
+        // console.log(column);
+        // console.log(typeof column);
+        column.forEach(function(obj) {
+          htmlString += "<td class='world-cell'>" + obj.worldCharacter + "</td>";
         });
         htmlString += "</tr>";
       });
@@ -86,13 +105,20 @@ var constructors = {
       $("#put-world-here").html(htmlString);
     };
     
+
     
     this.createWorld();
   },
   
-  Fish: function(type) {
+  Water: function(type, worldCharacter) {
     this.type = type;
+    this.worldCharacter = worldCharacter;
     
+  },
+  
+  Fish: function(type, worldCharacter) {
+    this.type = type;
+    this.worldCharacter = worldCharacter;
     //swim method for the fish constructor
     this.swim = function() {
       
@@ -100,10 +126,39 @@ var constructors = {
     
   },
 
-  Rock: function(type) {
+  Rock: function(type, worldCharacter) {
     this.type = type;
-  }
+    this.worldCharacter = worldCharacter;
+    this.rockColor = function() {
+      
+    };
+  },
   
+  Bubble: function(type, worldCharacter) {
+    this.type = type;
+    this.worldCharacter = worldCharacter;
+    //method of bubble rising to surface
+    this.bubbleFloat = function() {
+      
+    };
+    //animation of the bubble popping
+    this.bubblePop = function() {
+      
+    };
+  },
+  
+  Kelp: function(type, worldCharacter) {
+    this.type = type;
+    this.worldCharacter = worldCharacter;
+    //How high the kelp will grow
+    this.Height = function() {
+      
+    };
+    //How much the kelp with sway back and forth
+    this.sway = function() {
+      
+    };
+  },
   
 }; //end of constructors
 
