@@ -60,27 +60,32 @@ var constructors = {
     };
     
     this.getWorld = function() {
-      console.log("World: " + this.height + " " + this.width);
     };
     
     this.showWorld = function() {
       
-      console.log(this.world);
-      
+      var ranNum = 0;
       for(var i = 0; i < this.height; i++) {
         for(var j = 0; j < this.width; j++) {
-          // this.world[i][j] = new constructors.Water("water", " ");
-          if( i > width - 3) {
+
+          if( i > height - 3) {
             this.world[i][j] = new constructors.Rock("normal", "#");
-          } else {
+          }
+            else if( j < width && ranNum == 1) {
+              this.world[i][j] = new constructors.Fish("Betta", "G");
+            }
+            else {
             this.world[i][j] = new constructors.Water("water", " ");
           }
 
           
         }
+        ranNum = Math.floor((Math.random() * 3) + 1);
+
+
+
       }
         
-        this.world[7][7] = new constructors.Water("water", ":)");
       var htmlString = "";
       htmlString += "<table>";
       
@@ -91,7 +96,6 @@ var constructors = {
         // console.log(column);
         // console.log(typeof column);
         column.forEach(function(obj) {
-          console.log(obj);
           htmlString += "<td class='world-cell'>" + obj.worldCharacter + "</td>";
         });
         htmlString += "</tr>";
