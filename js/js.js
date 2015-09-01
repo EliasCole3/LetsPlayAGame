@@ -75,10 +75,10 @@ var constructors = {
 
           if(i > height - 3 && i < height -1 && j < width -1) {
             this.world[i][j] = new constructors.Rock("normal", "#");
-          // } else if(i < height - 2 && j < width - 1 && j < width && ranNum == 1) {
-            // this.world[i][j] = new constructors.Bubble("bubble", "o", j, i);
-          // } else if(i < height - 2 && j < width - 1 && j < width && ranNum == 2) {
-            // this.world[i][j] = new constructors.Fish("fish", "f", j, i);
+          } else if(i < height - 2 && j < width - 1 && j < width && ranNum == 1) {
+            this.world[i][j] = new constructors.Bubble("bubble", "o", j, i);
+          } else if(i < height - 2 && j < width - 1 && j < width && ranNum == 2) {
+            this.world[i][j] = new constructors.Fish("fish", "f", j, i);
           } else {
             this.world[i][j] = new constructors.Water("water", " ", j, i);
           }
@@ -89,9 +89,9 @@ var constructors = {
           // }
 
           //hardcoded fish for testing
-          if(i === 5 && j === 5) {
-            this.world[i][j] = new constructors.Fish("fish", "f", j, i);
-          }
+          // if(i === 5 && j === 5) {
+            // this.world[i][j] = new constructors.Fish("fish", "f", j, i);
+          // }
 
           ranNum = helpers.getRandomInt(1, 30);
         }
@@ -187,6 +187,8 @@ var constructors = {
     var x = this.x;
     var y = this.y;
     
+    
+    
     //swim method for the fish constructor
     this.swim = function() {
       
@@ -194,21 +196,23 @@ var constructors = {
 
     this.move = function(world) {
       
+    var x = this.x;
+    var y = this.y;
+      
       //if the object isn't looking outside of the world
-      if(this.y-1 >= 0) {
-        
-        console.log("x: " + x);
-        console.log("y: " + y);
-        
-        for(var i = 0; i < 20; i++) {
-          console.log(helpers.getRandomInt(x - 1, x + 1));
-          console.log(helpers.getRandomInt(y - 1, y + 1));
-        }
-        
-        
+      if(y-1 >= 0) {
+
         var destinationX = helpers.getRandomInt(x - 1, x + 1);
         var destinationY = helpers.getRandomInt(y - 1, y + 1);
+        if(destinationX === 0) destinationX = 5;
+        if(destinationY === 0) destinationY = 5;
+        
         var destinationType = world[destinationY][destinationX].type;
+        
+        // console.log("x: " + x);
+        // console.log("y: " + y);
+        // console.log("x dest: " + destinationX);
+        // console.log("y dest: " + destinationY);
 
         //if the destination doesn't equal the origin
         if(!(x === destinationX && y === destinationY)) {
@@ -223,7 +227,9 @@ var constructors = {
               
               //adjust the internal bubble location
               this.x = destinationX;
-              this.Y = destinationY;
+              this.y = destinationY;
+              var x = this.x;
+              var y = this.y;
               
               break;
             case "bubble":
