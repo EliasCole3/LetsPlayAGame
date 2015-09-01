@@ -75,9 +75,10 @@ var constructors = {
 
           if(i > height - 3 && i < height -1 && j < width -1) {
             this.world[i][j] = new constructors.Rock("normal", "#");
-          } else if(i < height - 2 && j < width - 1 && j < width && ranNum == 1) {
-            // this.world[i][j] = new constructors.Fish("Betta", "G");
-            this.world[i][j] = new constructors.Bubble("bubble", "o", j, i);
+          // } else if(i < height - 2 && j < width - 1 && j < width && ranNum == 1) {
+            // this.world[i][j] = new constructors.Bubble("bubble", "o", j, i);
+          // } else if(i < height - 2 && j < width - 1 && j < width && ranNum == 2) {
+            // this.world[i][j] = new constructors.Fish("fish", "f", j, i);
           } else {
             this.world[i][j] = new constructors.Water("water", " ", j, i);
           }
@@ -87,7 +88,12 @@ var constructors = {
             // this.world[i][j] = new constructors.Bubble("bubble", "o", j, i);
           // }
 
-          ranNum = helpers.getRandomInt(1, 15);
+          //hardcoded fish for testing
+          if(i === 5 && j === 5) {
+            this.world[i][j] = new constructors.Fish("fish", "f", j, i);
+          }
+
+          ranNum = helpers.getRandomInt(1, 30);
         }
       }
     };
@@ -98,7 +104,7 @@ var constructors = {
     console.log(this.world);
     
     // var movables = ["fish", "bubble", "kelp"];
-    var movables = ["bubble"];
+    var movables = ["bubble", "fish"];
     
     for(var i = 0; i < this.height; i++) {
       for(var j = 0; j < this.width; j++) {
@@ -173,6 +179,77 @@ var constructors = {
     };
   },
   
+  Fish: function(type, worldCharacter, xValue, yValue) {
+    this.type = type;
+    this.worldCharacter = worldCharacter;
+    this.x = xValue;
+    this.y = yValue;
+    var x = this.x;
+    var y = this.y;
+    
+    //swim method for the fish constructor
+    this.swim = function() {
+      
+    };
+
+    this.move = function(world) {
+      
+      //if the object isn't looking outside of the world
+      if(this.y-1 >= 0) {
+        
+        console.log("x: " + x);
+        console.log("y: " + y);
+        
+        for(var i = 0; i < 20; i++) {
+          console.log(helpers.getRandomInt(x - 1, x + 1));
+          console.log(helpers.getRandomInt(y - 1, y + 1));
+        }
+        
+        
+        var destinationX = helpers.getRandomInt(x - 1, x + 1);
+        var destinationY = helpers.getRandomInt(y - 1, y + 1);
+        var destinationType = world[destinationY][destinationX].type;
+
+        //if the destination doesn't equal the origin
+        if(!(x === destinationX && y === destinationY)) {
+          
+          switch(destinationType) {
+            case "water":
+            
+              //abstract this out
+              delete world[destinationY][destinationX];
+              world[destinationY][destinationX] = this;
+              world[y][x] = new constructors.Water("water", " ", x, y);
+              
+              //adjust the internal bubble location
+              this.x = destinationX;
+              this.Y = destinationY;
+              
+              break;
+            case "bubble":
+            
+              break;
+            case "fish":
+            
+              break;
+            default:
+            
+          }
+          
+          
+          
+        }
+        
+      }
+      
+    };
+
+     this.getLocationString = function() {
+      return "x: " + this.x + ", y: " + this.y; 
+    };  
+        
+  },
+  
   Water: function(type, worldCharacter, x, y) {
     this.type = type;
     this.worldCharacter = worldCharacter;
@@ -182,21 +259,6 @@ var constructors = {
     this.getLocationString = function() {
       return "x: " + this.x + ", y: " + this.y; 
     };
-  },
-  
-  Fish: function(type, worldCharacter) {
-    this.type = type;
-    this.worldCharacter = worldCharacter;
-    
-    //swim method for the fish constructor
-    this.swim = function() {
-      
-    };
-
-    this.move = function() {
-      
-    };
-    
   },
 
   Rock: function(type, worldCharacter) {
