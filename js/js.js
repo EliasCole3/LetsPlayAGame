@@ -8,7 +8,7 @@ Fill in Fish.swim()
 Add collision detection
 Add sound to bubbles popping
 Add some prototypes for inheritance
-
+Create an api that more semantically determines the probability distributions
 */
 
 //when the page loads
