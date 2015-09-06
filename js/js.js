@@ -9,6 +9,7 @@ Add collision detection
 Add sound to bubbles popping
 Add some prototypes for inheritance
 Create an api that more semantically determines the probability distributions
+Multiple objects should be able to be in the same space
 */
 
 //when the page loads
@@ -75,7 +76,8 @@ var constructors = {
 
           if(i > height - 3 && i < height -1 && j < width -1) {
             this.world[i][j] = new constructors.Rock("normal", "#");
-          } else if(i < height - 2 && j < width - 1 && j < width && ranNum == 1) {
+          } else if(i < height - 2 && j < width - 1 && ranNum == 1) {
+            // this.world[i][j] = new constructors.Fish("Betta", "G");
             this.world[i][j] = new constructors.Bubble("bubble", "o", j, i);
           } else if(i < height - 2 && j < width - 1 && j < width && ranNum == 2) {
             this.world[i][j] = new constructors.Fish("fish", "f", j, i);
