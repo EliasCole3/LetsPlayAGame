@@ -10,3 +10,13 @@
 .odd-cell {
   background-color: black;
 }
+
+#world-wrapper {
+  width: 100%;
+}
+
+.world {
+  /* margin: 0 auto; */
+  margin-top: 50px;
+  margin-left: 50px;
+}
