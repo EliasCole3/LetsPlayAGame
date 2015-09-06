@@ -82,7 +82,7 @@ var constructors = {
         for(var j = 0; j < this.width; j++) {
 
           if(i > height - 2 || j > width -2 || i == 0 || j == 0) {
-            this.world[i][j] = new constructors.Rock("normal", "#");
+            this.world[i][j] = new constructors.Rock("Rock", "#");
           } else if(i < height - 1 && j < width - 1 && ranNum == 1) {
             // this.world[i][j] = new constructors.Fish("Betta", "G");
             this.world[i][j] = new constructors.Bubble("bubble", "o", j, i);
@@ -169,7 +169,7 @@ var constructors = {
           
           //adjust the internal bubble location
           this.y--;
-        } else if (aboveType === "bubble") {
+        } else if (aboveType === "bubble" || aboveType === "Rock") {
           this.pop();
         } else {
           //something other than bubbles and water
