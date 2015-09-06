@@ -74,9 +74,9 @@ var constructors = {
       for(var i = 0; i < this.height; i++) {
         for(var j = 0; j < this.width; j++) {
 
-          if(i > height - 3 && i < height -1 && j < width -1) {
+          if(i > height - 2 || j > width -2 || i == 0 || j == 0) {
             this.world[i][j] = new constructors.Rock("normal", "#");
-          } else if(i < height - 2 && j < width - 1 && ranNum == 1) {
+          } else if(i < height - 1 && j < width - 1 && ranNum == 1) {
             // this.world[i][j] = new constructors.Fish("Betta", "G");
             this.world[i][j] = new constructors.Bubble("bubble", "o", j, i);
           } else if(i < height - 2 && j < width - 1 && j < width && ranNum == 2) {
