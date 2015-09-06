@@ -75,7 +75,7 @@ var constructors = {
 
           if(i > height - 3 && i < height -1 && j < width -1) {
             this.world[i][j] = new constructors.Rock("normal", "#");
-          } else if(i < height - 2 && j < width - 1 && j < width && ranNum == 1) {
+          } else if(i < height - 2 && j < width - 1 && ranNum == 1) {
             // this.world[i][j] = new constructors.Fish("Betta", "G");
             this.world[i][j] = new constructors.Bubble("bubble", "o", j, i);
           } else {
