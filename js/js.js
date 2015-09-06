@@ -12,11 +12,13 @@ Create an api that more semantically determines the probability distributions
 Multiple objects should be able to be in the same space
 */
 
+var smallWorld;
+
 //when the page loads
 $(function() {
 
   //create a world with a height of 12 and a width of 12
-  var smallWorld = new constructors.World(20, 30, "world1");;
+  smallWorld = new constructors.World(10, 25, "world1");;
   
   //fill the world with entities
   smallWorld.fillWorld();
@@ -84,7 +86,6 @@ var constructors = {
           if(i > height - 2 || j > width -2 || i == 0 || j == 0) {
             this.world[i][j] = new constructors.Rock("Rock", "#");
           } else if(i < height - 1 && j < width - 1 && ranNum == 1) {
-            // this.world[i][j] = new constructors.Fish("Betta", "G");
             this.world[i][j] = new constructors.Bubble("bubble", "o", j, i);
           } else if(i < height - 2 && j < width - 1 && j < width && ranNum == 2) {
             this.world[i][j] = new constructors.Fish("fish", "f", j, i);
@@ -92,8 +93,14 @@ var constructors = {
             this.world[i][j] = new constructors.Water("water", " ", j, i);
           }
           
-          //hardcoded bubble for testing
+          // hardcoded bubbles for testing
           // if(i === 5 && j === 5) {
+            // this.world[i][j] = new constructors.Bubble("bubble", "o", j, i);
+          // }
+          // if(i === 4 && j === 5) {
+            // this.world[i][j] = new constructors.Bubble("bubble", "o", j, i);
+          // }
+          // if(i === 3 && j === 5) {
             // this.world[i][j] = new constructors.Bubble("bubble", "o", j, i);
           // }
 
@@ -109,20 +116,21 @@ var constructors = {
     
   this.tick = function() {
     //for every movable object in the world, activate it's movement
-    
-    console.log(this.world);
-    
+
     // var movables = ["fish", "bubble", "kelp"];
     var movables = ["bubble", "fish"];
     
     for(var i = 0; i < this.height; i++) {
       for(var j = 0; j < this.width; j++) {
         if(movables.indexOf(this.world[i][j].type) !== -1) {
-          this.world[i][j].move(this.world);
+          if(this.world[i][j].status === "dead") {
+            this.world[i][j] = new constructors.Water("water", " ", j, i);
+          } else {
+            this.world[i][j].move(this.world);
+          }
         }
       }
     }
-    
     
     this.framesPassed++;
   };
@@ -137,6 +145,8 @@ var constructors = {
     this.worldCharacter = worldCharacter;
     this.x = x;
     this.y = y;
+    this.animationCount = 1;
+    this.status = "";
 
     //method of bubble rising to surface
     this.bubbleFloat = function() {
@@ -149,6 +159,16 @@ var constructors = {
     };
     
     this.move = function(world) {
+      
+      if(this.worldCharacter === "pop!") {
+        console.log(this.animationCount);
+        this.animationCount--;
+      }
+      
+      if(this.animationCount === 0) {
+        this.status = "dead";
+        return;
+      }
       
       //if the object isn't looking outside of the world
       if(this.y-1 >= 0) {
@@ -195,6 +215,8 @@ var constructors = {
     this.y = yValue;
     var x = this.x;
     var y = this.y;
+    
+    this.status = "";
     
     
     
@@ -270,6 +292,7 @@ var constructors = {
     this.worldCharacter = worldCharacter;
     this.x = x;
     this.y = y;
+    this.status = "";
     
     this.getLocationString = function() {
       return "x: " + this.x + ", y: " + this.y; 
@@ -279,6 +302,7 @@ var constructors = {
   Rock: function(type, worldCharacter) {
     this.type = type;
     this.worldCharacter = worldCharacter;
+    this.status = "";
     this.rockColor = function() {
       
     };
