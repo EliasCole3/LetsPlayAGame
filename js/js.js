@@ -9,6 +9,7 @@ Add collision detection
 Add sound to bubbles popping
 Add some prototypes for inheritance
 Create an api that more semantically determines the probability distributions
+Multiple objects should be able to be in the same space
 */
 
 //when the page loads
