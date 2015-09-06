@@ -16,7 +16,7 @@ Multiple objects should be able to be in the same space
 $(function() {
 
   //create a world with a height of 12 and a width of 12
-  var smallWorld = new constructors.World(12, 12, "world1");;
+  var smallWorld = new constructors.World(20, 30, "world1");;
   
   //fill the world with entities
   smallWorld.fillWorld();
@@ -24,13 +24,20 @@ $(function() {
   //add a table to the webpage that represents the world 
   smallWorld.showWorld();
   
-  $("#go").click(function() {
+  $("#tick").click(function() {
     smallWorld.tick();
     smallWorld.showWorld();
     $("#frames-passed").text(smallWorld.framesPassed);
   });
   
-  
+  $("#go").click(function() {
+    var speed = $("#speed").val();
+    setInterval(function() {
+      smallWorld.tick();
+      smallWorld.showWorld();
+      $("#frames-passed").text(smallWorld.framesPassed);
+    }, speed);
+  });
 
 });
 
