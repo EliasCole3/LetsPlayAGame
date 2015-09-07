@@ -86,14 +86,16 @@ var constructors = {
 
           if(j > width -2 || i == 0 || j == 0) {
             this.world[i][j] = new constructors.Rock("Rock", "#");
-          } else if(i > height -2 && (ranNum == 2 || ranNum == 3 || ranNum == 4 || ranNum == 5)) {
+          } else if(i > height -2 && (ranNum == 2 || ranNum == 3 || ranNum == 4 || ranNum == 5 || ranNum == 6 || ranNum == 7)) {
             this.world[i][j] = new constructors.BubbleRock("Gen", "T");
           } else if( i > height -2) {
             this.world[i][j] = new constructors.Rock("Rock", "#");
           } else if(i < height - 1 && j < width - 1 && ranNum == 1) {
             this.world[i][j] = new constructors.Bubble("bubble", "o", j, i);
-          }else if(i < height - 2 && j < width - 1 && j < width && ranNum == 2) {
+          } else if(i < height - 2 && j < width - 1 && j < width && ranNum == 2) {
             this.world[i][j] = new constructors.Fish("fish", "f", j, i);
+          } else if(i < height - 2 && j < width - 1 && j < width && ranNum == 3) {
+            this.world[i][j] = new constructors.Fish("fish", "g", j, i);
           } else {
             this.world[i][j] = new constructors.Water("water", " ", j, i);
           }
@@ -119,7 +121,7 @@ var constructors = {
             // this.world[i][j] = new constructors.BubbleRock("Gen", "T");
           // }
 
-          ranNum = helpers.getRandomInt(1, 30);
+          ranNum = helpers.getRandomInt(1, 40);
         }
       }
     };
@@ -136,7 +138,7 @@ var constructors = {
           if(this.world[i][j].status === "dead") {
             this.world[i][j] = new constructors.Water("water", " ", j, i);
           } else if(this.world[i][j].type === "Gen") {
-            var ranNum = helpers.getRandomInt(1, 4);
+            var ranNum = helpers.getRandomInt(1, 6);
             this.world[i][j].spawnBubble(this.world, ranNum, i, j);
           } else {
             this.world[i][j].move(this.world);
@@ -189,6 +191,10 @@ var constructors = {
         //if the space above the bubble is empty
         //@todo: dear god this looks horrific
         if(aboveType === "water") {
+          var randNum = helpers.getRandomInt(1, 20);
+          if(randNum === 1) {
+            this.pop();
+          }
           
           //remove the water above the bubble //necessary?
           delete world[this.y-1][this.x];
