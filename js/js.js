@@ -12,13 +12,14 @@ Create an api that more semantically determines the probability distributions
 Multiple objects should be able to be in the same space
 */
 
+
 var smallWorld;
 
 //when the page loads
 $(function() {
 
   //create a world with a height of 12 and a width of 12
-  smallWorld = new constructors.World(10, 25, "world1");;
+  smallWorld = new constructors.World(20, 30, "world1");
   
   //fill the world with entities
   smallWorld.fillWorld();
@@ -83,11 +84,15 @@ var constructors = {
       for(var i = 0; i < this.height; i++) {
         for(var j = 0; j < this.width; j++) {
 
-          if(i > height - 2 || j > width -2 || i == 0 || j == 0) {
+          if(j > width -2 || i == 0 || j == 0) {
+            this.world[i][j] = new constructors.Rock("Rock", "#");
+          } else if(i > height -2 && (ranNum == 2 || ranNum == 3 || ranNum == 4 || ranNum == 5)) {
+            this.world[i][j] = new constructors.BubbleRock("Gen", "T");
+          } else if( i > height -2) {
             this.world[i][j] = new constructors.Rock("Rock", "#");
           } else if(i < height - 1 && j < width - 1 && ranNum == 1) {
             this.world[i][j] = new constructors.Bubble("bubble", "o", j, i);
-          } else if(i < height - 2 && j < width - 1 && j < width && ranNum == 2) {
+          }else if(i < height - 2 && j < width - 1 && j < width && ranNum == 2) {
             this.world[i][j] = new constructors.Fish("fish", "f", j, i);
           } else {
             this.world[i][j] = new constructors.Water("water", " ", j, i);
@@ -109,6 +114,11 @@ var constructors = {
             // this.world[i][j] = new constructors.Fish("fish", "f", j, i);
           // }
 
+          //hardcoded bubbleRock
+          // if(i === 19 && j === 5) {
+            // this.world[i][j] = new constructors.BubbleRock("Gen", "T");
+          // }
+
           ranNum = helpers.getRandomInt(1, 30);
         }
       }
@@ -118,13 +128,16 @@ var constructors = {
     //for every movable object in the world, activate it's movement
 
     // var movables = ["fish", "bubble", "kelp"];
-    var movables = ["bubble", "fish"];
+    var movables = ["bubble", "fish", "Gen"];
     
     for(var i = 0; i < this.height; i++) {
       for(var j = 0; j < this.width; j++) {
         if(movables.indexOf(this.world[i][j].type) !== -1) {
           if(this.world[i][j].status === "dead") {
             this.world[i][j] = new constructors.Water("water", " ", j, i);
+          } else if(this.world[i][j].type === "Gen") {
+            var ranNum = helpers.getRandomInt(1, 4);
+            this.world[i][j].spawnBubble(this.world, ranNum, i, j);
           } else {
             this.world[i][j].move(this.world);
           }
@@ -161,7 +174,6 @@ var constructors = {
     this.move = function(world) {
       
       if(this.worldCharacter === "pop!") {
-        console.log(this.animationCount);
         this.animationCount--;
       }
       
@@ -189,7 +201,7 @@ var constructors = {
           
           //adjust the internal bubble location
           this.y--;
-        } else if (aboveType === "bubble" || aboveType === "Rock") {
+        } else if (aboveType === "Rock") {
           this.pop();
         } else {
           //something other than bubbles and water
@@ -232,7 +244,6 @@ var constructors = {
       
       //if the object isn't looking outside of the world
       if(y-1 >= 0) {
-
         var destinationX = helpers.getRandomInt(x - 1, x + 1);
         var destinationY = helpers.getRandomInt(y - 1, y + 1);
         if(destinationX === 0) destinationX = 5;
@@ -247,7 +258,6 @@ var constructors = {
 
         //if the destination doesn't equal the origin
         if(!(x === destinationX && y === destinationY)) {
-          
           switch(destinationType) {
             case "water":
             
@@ -272,11 +282,7 @@ var constructors = {
             default:
             
           }
-          
-          
-          
         }
-        
       }
       
     };
@@ -305,6 +311,18 @@ var constructors = {
     this.status = "";
     this.rockColor = function() {
       
+    };
+  },
+  
+  BubbleRock: function(type, worldCharacter) {
+    this.type = type;
+    this.worldCharacter = worldCharacter;
+    this.status = "";
+    this.animationCount = 2;
+    this.spawnBubble = function(world, ranNum, i, j) {
+      if(ranNum == 1) {
+        world[i - 1][j] = new constructors.Bubble("bubble", "o", j, i - 1);
+      };
     };
   },
   
