@@ -12,11 +12,15 @@
 }
 
 #world-wrapper {
-  width: 100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
 .world {
-  /* margin: 0 auto; */
   margin-top: 50px;
-  margin-left: 50px;
+}
+
+.control-button {
+  width: 100px;
 }
