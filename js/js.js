@@ -19,7 +19,7 @@ var smallWorld;
 $(function() {
 
   //create a world with a height of 12 and a width of 12
-  smallWorld = new constructors.World(20, 30, "world1");
+  smallWorld = new constructors.World(25, 40, "world1");
   
   //fill the world with entities
   smallWorld.fillWorld();
