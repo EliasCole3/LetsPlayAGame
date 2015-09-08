@@ -121,7 +121,7 @@ var constructors = {
             // this.world[i][j] = new constructors.BubbleRock("Gen", "T");
           // }
 
-          ranNum = helpers.getRandomInt(1, 40);
+          ranNum = helpers.getRandomInt(1, 180);
         }
       }
     };
