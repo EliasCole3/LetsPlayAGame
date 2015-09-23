@@ -10,6 +10,7 @@ Add sound to bubbles popping
 Add some prototypes for inheritance
 Create an api that more semantically determines the probability distributions
 Multiple objects should be able to be in the same space
+Abstract out moving from one cell to another
 */
 
 
@@ -138,7 +139,8 @@ var constructors = {
           if(this.world[i][j].status === "dead") {
             this.world[i][j] = new constructors.Water("water", " ", j, i);
           } else if(this.world[i][j].type === "Gen") {
-            var ranNum = helpers.getRandomInt(1, 6);
+            // var ranNum = helpers.getRandomInt(1, 6);
+            var ranNum = helpers.getRandomInt(1, 2); //for testing bubble move algorithm
             this.world[i][j].spawnBubble(this.world, ranNum, i, j);
           } else {
             this.world[i][j].move(this.world);
@@ -209,8 +211,42 @@ var constructors = {
           this.y--;
         } else if (aboveType === "Rock") {
           this.pop();
-        } else {
-          //something other than bubbles and water
+        } else { //something other than bubbles and water
+
+          //randomly try the top left or top right positions
+          var rand = helpers.getRandomInt(1, 2)
+
+          if(rand === 1) { //try the left first
+            if(world[this.y-1][this.x-1].type === "water") {
+              world[this.y-1][this.x-1] = this;
+              world[this.y][this.x] = new constructors.Water("water", " ", this.x, this.y);
+              this.y--;
+              this.x--;
+            } else if(world[this.y-1][this.x+1].type === "water") {
+              world[this.y-1][this.x+1] = this; // e.g. world[1][15]
+              world[this.y][this.x] = new constructors.Water("water", " ", this.x, this.y);
+              this.y--;
+              this.x++;
+            } else {
+              //all three spots above the bubble are full, do nothing
+            }
+          } else { //try the right first
+            if(world[this.y-1][this.x+1].type === "water") {
+              world[this.y-1][this.x+1] = this;
+              world[this.y][this.x] = new constructors.Water("water", " ", this.x, this.y);
+              this.y--;
+              this.x++;
+            } else if(world[this.y-1][this.x-1].type === "water") {
+              world[this.y-1][this.x-1] = this;
+              world[this.y][this.x] = new constructors.Water("water", " ", this.x, this.y);
+              this.y--;
+              this.x--;
+            } else {
+              //all three spots above the bubble are full, do nothing
+            }
+          }
+          
+          
         }
       } else if(this.y-1 === -1) {
         this.pop();
