@@ -19,7 +19,7 @@ var smallWorld;
 $(function() {
 
   //create a world with a height of 12 and a width of 12
-  smallWorld = new constructors.World(20, 30, "world1");
+  smallWorld = new constructors.World(25, 40, "world1");
   
   //fill the world with entities
   smallWorld.fillWorld();
@@ -87,7 +87,7 @@ var constructors = {
           if(j > width -2 || i == 0 || j == 0) {
             this.world[i][j] = new constructors.Rock("Rock", "#");
           } else if(i > height -2 && (ranNum == 2 || ranNum == 3 || ranNum == 4 || ranNum == 5 || ranNum == 6 || ranNum == 7)) {
-            this.world[i][j] = new constructors.BubbleRock("Gen", "T");
+            this.world[i][j] = new constructors.BubbleRock("Gen", "T", j, i);
           } else if( i > height -2) {
             this.world[i][j] = new constructors.Rock("Rock", "#");
           } else if(i < height - 1 && j < width - 1 && ranNum == 1) {
@@ -139,7 +139,7 @@ var constructors = {
             this.world[i][j] = new constructors.Water("water", " ", j, i);
           } else if(this.world[i][j].type === "Gen") {
             var ranNum = helpers.getRandomInt(1, 6);
-            this.world[i][j].spawnBubble(this.world, ranNum, i, j);
+            this.world[i][j].spawnBubble(this.world, ranNum, j, i);
           } else {
             this.world[i][j].move(this.world);
           }
@@ -152,7 +152,6 @@ var constructors = {
 
     //initialize the world when it's created
     this.createWorld();
-    console.log(this.world);
   },
   
   Bubble: function(type, worldCharacter, x, y) {
@@ -320,15 +319,20 @@ var constructors = {
     };
   },
   
-  BubbleRock: function(type, worldCharacter) {
+  BubbleRock: function(type, worldCharacter, x, y) {
     this.type = type;
+    this.x = x;
+    this.y = y;
     this.worldCharacter = worldCharacter;
     this.status = "";
     this.animationCount = 2;
-    this.spawnBubble = function(world, ranNum, i, j) {
-      if(ranNum == 1) {
-        world[i - 1][j] = new constructors.Bubble("bubble", "o", j, i - 1);
-      };
+    this.spawnBubble = function(world, ranNum, x, y) {
+      var aboveType = world[this.y-1][this.x].type;
+      if(aboveType === "water" && ranNum === 1) {
+        world[y - 1][x] = new constructors.Bubble("bubble", "o", x, y - 1);
+      }
+      else{
+      }
     };
   },
   
