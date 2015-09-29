@@ -11,6 +11,12 @@ Add some prototypes for inheritance
 Create an api that more semantically determines the probability distributions
 Multiple objects should be able to be in the same space
 Abstract out moving from one cell to another
+
+slow down movement
+restrict fish movement to cardinal directions
+Add alternate view layer that uses images
+Refactor everything
+
 */
 
 
@@ -20,7 +26,7 @@ var smallWorld;
 $(function() {
 
   //create a world with a height of 12 and a width of 12
-  smallWorld = new constructors.World(25, 40, "world1");
+  smallWorld = new constructors.World(15, 40, "world1");
   
   //fill the world with entities
   smallWorld.fillWorld();
@@ -86,7 +92,7 @@ var constructors = {
 
           if(j > width -2 || i == 0 || j == 0) {
             this.world[i][j] = new constructors.Rock("Rock", "#");
-          } else if(i > height -2 && (ranNum == 2 || ranNum == 3 || ranNum == 4 || ranNum == 5 || ranNum == 6 || ranNum == 7)) {
+          } else if(i > height -2 && (ranNum === 2 || ranNum === 3 || ranNum === 4 || ranNum === 5 || ranNum === 6 || ranNum === 7 || ranNum === 8 || ranNum === 9 || ranNum === 10 || ranNum === 11)) {
             this.world[i][j] = new constructors.BubbleRock("Gen", "T", j, i);
           } else if( i > height -2) {
             this.world[i][j] = new constructors.Rock("Rock", "#");
@@ -267,6 +273,7 @@ var constructors = {
     this.y = yValue;
     var x = this.x;
     var y = this.y;
+    this.movementCounter = 0;
     
     this.status = "";
     
@@ -278,51 +285,50 @@ var constructors = {
     };
 
     this.move = function(world) {
-      
-    var x = this.x;
-    var y = this.y;
-      
-      //if the object isn't looking outside of the world
-      if(y-1 >= 0) {
-        var destinationX = helpers.getRandomInt(x - 1, x + 1);
-        var destinationY = helpers.getRandomInt(y - 1, y + 1);
-        if(destinationX === 0) destinationX = 5;
-        if(destinationY === 0) destinationY = 5;
+      if(this.movementCounter === 4) {
+        var x = this.x;
+        var y = this.y;
         
-        var destinationType = world[destinationY][destinationX].type;
-        
-        // console.log("x: " + x);
-        // console.log("y: " + y);
-        // console.log("x dest: " + destinationX);
-        // console.log("y dest: " + destinationY);
+        //if the object isn't looking outside of the world
+        if(y-1 >= 0) {
+          var destinationX = helpers.getRandomInt(x - 1, x + 1);
+          var destinationY = helpers.getRandomInt(y - 1, y + 1);
+          if(destinationX === 0) destinationX = 5;
+          if(destinationY === 0) destinationY = 5;
+          
+          var destinationType = world[destinationY][destinationX].type;
 
-        //if the destination doesn't equal the origin
-        if(!(x === destinationX && y === destinationY)) {
-          switch(destinationType) {
-            case "water":
-            
-              //abstract this out
-              delete world[destinationY][destinationX];
-              world[destinationY][destinationX] = this;
-              world[y][x] = new constructors.Water("water", " ", x, y);
+          //if the destination doesn't equal the origin
+          if(!(x === destinationX && y === destinationY)) {
+            switch(destinationType) {
+              case "water":
               
-              //adjust the internal bubble location
-              this.x = destinationX;
-              this.y = destinationY;
-              var x = this.x;
-              var y = this.y;
+                //abstract this out
+                delete world[destinationY][destinationX];
+                world[destinationY][destinationX] = this;
+                world[y][x] = new constructors.Water("water", " ", x, y);
+                
+                //adjust the internal bubble location
+                this.x = destinationX;
+                this.y = destinationY;
+                var x = this.x;
+                var y = this.y;
+                
+                break;
+              case "bubble":
               
-              break;
-            case "bubble":
-            
-              break;
-            case "fish":
-            
-              break;
-            default:
-            
+                break;
+              case "fish":
+              
+                break;
+              default:
+              
+            }
           }
         }
+        this.movementCounter = 0;
+      } else {
+        this.movementCounter++;
       }
       
     };
