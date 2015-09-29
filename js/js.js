@@ -27,7 +27,6 @@ $(function() {
   
   //add a table to the webpage that represents the world 
   smallWorld.showWorld();
-  
   $("#tick").click(function() {
     smallWorld.tick();
     smallWorld.showWorld();
@@ -141,7 +140,7 @@ var constructors = {
           } else if(this.world[i][j].type === "Gen") {
             // var ranNum = helpers.getRandomInt(1, 6);
             var ranNum = helpers.getRandomInt(1, 2); //for testing bubble move algorithm
-            this.world[i][j].spawnBubble(this.world, ranNum, i, j);
+            this.world[i][j].spawnBubble(this.world, ranNum, j, i);
           } else {
             this.world[i][j].move(this.world);
           }
