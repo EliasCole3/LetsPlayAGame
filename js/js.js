@@ -234,7 +234,8 @@ var constructors = {
           world[this.y-1][this.x] = this;
           
           //fill the old cell with a new water
-          world[this.y][this.x] = new constructors.Water("water", " ", this.x, this.y);
+          // world[this.y][this.x] = new constructors.Water("water", " ", this.x, this.y);
+          world[this.y][this.x] = new constructors.Water("water", "<img src='images/water.jpg' width='50' height='50'>", this.x, this.y);
           
           //adjust the internal bubble location
           this.y--;
@@ -248,12 +249,12 @@ var constructors = {
           if(rand === 1) { //try the left first
             if(world[this.y-1][this.x-1].type === "water") {
               world[this.y-1][this.x-1] = this;
-              world[this.y][this.x] = new constructors.Water("water", " ", this.x, this.y);
+              world[this.y][this.x] = new constructors.Water("water", "<img src='images/water.jpg' width='50' height='50'>", this.x, this.y);
               this.y--;
               this.x--;
             } else if(world[this.y-1][this.x+1].type === "water") {
               world[this.y-1][this.x+1] = this; // e.g. world[1][15]
-              world[this.y][this.x] = new constructors.Water("water", " ", this.x, this.y);
+              world[this.y][this.x] = new constructors.Water("water", "<img src='images/water.jpg' width='50' height='50'>", this.x, this.y);
               this.y--;
               this.x++;
             } else {
@@ -262,12 +263,12 @@ var constructors = {
           } else { //try the right first
             if(world[this.y-1][this.x+1].type === "water") {
               world[this.y-1][this.x+1] = this;
-              world[this.y][this.x] = new constructors.Water("water", " ", this.x, this.y);
+              world[this.y][this.x] = new constructors.Water("water", "<img src='images/water.jpg' width='50' height='50'>", this.x, this.y);
               this.y--;
               this.x++;
             } else if(world[this.y-1][this.x-1].type === "water") {
               world[this.y-1][this.x-1] = this;
-              world[this.y][this.x] = new constructors.Water("water", " ", this.x, this.y);
+              world[this.y][this.x] = new constructors.Water("water", "<img src='images/water.jpg' width='50' height='50'>", this.x, this.y);
               this.y--;
               this.x--;
             } else {
@@ -331,7 +332,7 @@ var constructors = {
                 //abstract this out
                 delete world[destinationY][destinationX];
                 world[destinationY][destinationX] = this;
-                world[y][x] = new constructors.Water("water", " ", x, y);
+                world[y][x] = new constructors.Water("water", "<img src='images/water.jpg' width='50' height='50'>", x, y);
                 
                 //adjust the internal bubble location
                 this.x = destinationX;
@@ -395,7 +396,7 @@ var constructors = {
     this.spawnBubble = function(world, ranNum, x, y) {
       var aboveType = world[this.y-1][this.x].type;
       if(aboveType === "water" && ranNum === 1) {
-        world[y - 1][x] = new constructors.Bubble("bubble", "o", x, y - 1);
+        world[y - 1][x] = new constructors.Bubble("bubble", "<img src='images/bubble.png' width='50' height='50'>", x, y - 1);
       }
       else{
       }
