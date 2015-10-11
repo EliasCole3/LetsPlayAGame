@@ -26,13 +26,14 @@ var smallWorld;
 $(function() {
 
   //create a world with a height of 12 and a width of 12
-  smallWorld = new constructors.World(15, 40, "world1");
+  smallWorld = new constructors.World(15, 30, "world1");
   
   //fill the world with entities
   smallWorld.fillWorld();
   
   //add a table to the webpage that represents the world 
   smallWorld.showWorld();
+  
   $("#tick").click(function() {
     smallWorld.tick();
     smallWorld.showWorld();
@@ -65,24 +66,7 @@ var constructors = {
       for(var i = 0; i < array2d.length; i++) {
         array2d[i] = new Array(this.width);
       }
-      
       this.world = array2d;
-    };
-    
-    this.showWorld = function() {
-      var htmlString = "";
-      htmlString += "<table>";
-
-      this.world.forEach(function(column) {
-        htmlString += "<tr>";
-        column.forEach(function(obj) {
-          htmlString += "<td class='world-cell'>" + obj.worldCharacter + "</td>";
-        });
-        htmlString += "</tr>";
-      });
-      
-      htmlString += "</table>";
-      $("#put-world-here").html(htmlString);
     };
     
     this.fillWorld = function() {
@@ -90,20 +74,36 @@ var constructors = {
       for(var i = 0; i < this.height; i++) {
         for(var j = 0; j < this.width; j++) {
 
+          // if(j > width -2 || i == 0 || j == 0) {
+            // this.world[i][j] = new constructors.Rock("Rock", "#");
+          // } else if(i > height -2 && (ranNum > 2 && ranNum < 11)) {
+            // this.world[i][j] = new constructors.BubbleRock("Gen", "T", j, i);
+          // } else if( i > height -2) {
+            // this.world[i][j] = new constructors.Rock("Rock", "#");
+          // } else if(i < height - 1 && j < width - 1 && ranNum == 1) {
+            // this.world[i][j] = new constructors.Bubble("bubble", "o", j, i);
+          // } else if(i < height - 2 && j < width - 1 && j < width && ranNum == 2) {
+            // this.world[i][j] = new constructors.Fish("fish", "f", j, i);
+          // } else if(i < height - 2 && j < width - 1 && j < width && ranNum == 3) {
+            // this.world[i][j] = new constructors.Fish("fish", "g", j, i);
+          // } else {
+            // this.world[i][j] = new constructors.Water("water", " ", j, i);
+          // }
+
           if(j > width -2 || i == 0 || j == 0) {
-            this.world[i][j] = new constructors.Rock("Rock", "#");
-          } else if(i > height -2 && (ranNum === 2 || ranNum === 3 || ranNum === 4 || ranNum === 5 || ranNum === 6 || ranNum === 7 || ranNum === 8 || ranNum === 9 || ranNum === 10 || ranNum === 11)) {
-            this.world[i][j] = new constructors.BubbleRock("Gen", "T", j, i);
+            this.world[i][j] = new constructors.Rock("Rock", "<img src='images/rock.jpg' width='50' height='50'>");
+          } else if(i > height -2 && (ranNum > 2 && ranNum < 11)) {
+            this.world[i][j] = new constructors.BubbleRock("Gen", "<img src='images/bubblerock.jpg' width='50' height='50'>", j, i);
           } else if( i > height -2) {
-            this.world[i][j] = new constructors.Rock("Rock", "#");
+            this.world[i][j] = new constructors.Rock("Rock", "<img src='images/rock.jpg' width='50' height='50'>");
           } else if(i < height - 1 && j < width - 1 && ranNum == 1) {
-            this.world[i][j] = new constructors.Bubble("bubble", "o", j, i);
+            this.world[i][j] = new constructors.Bubble("bubble", "<img src='images/bubble.png' width='50' height='50'>", j, i);
           } else if(i < height - 2 && j < width - 1 && j < width && ranNum == 2) {
-            this.world[i][j] = new constructors.Fish("fish", "f", j, i);
+            this.world[i][j] = new constructors.Fish("fish", "<img src='images/fish1.jpg' width='50' height='50'>", j, i);
           } else if(i < height - 2 && j < width - 1 && j < width && ranNum == 3) {
-            this.world[i][j] = new constructors.Fish("fish", "g", j, i);
+            this.world[i][j] = new constructors.Fish("fish", "<img src='images/fish2.jpg' width='50' height='50'>", j, i);
           } else {
-            this.world[i][j] = new constructors.Water("water", " ", j, i);
+            this.world[i][j] = new constructors.Water("water", "<img src='images/water.jpg' width='50' height='50'>", j, i);
           }
           
           // hardcoded bubbles for testing
@@ -132,17 +132,40 @@ var constructors = {
       }
     };
     
-  this.tick = function() {
+    this.showWorld = function() {
+      var htmlString = "";
+      htmlString += "<table>";
+      
+
+      this.world.forEach(function(row) {
+        htmlString += "<tr>";
+        row.forEach(function(obj) {
+          htmlString += "<td class='world-cell'>" + obj.worldCharacter + "</td>";
+        });
+        htmlString += "</tr>";
+      });
+      
+      htmlString += "</table>";
+      $("#put-world-here").html(htmlString);
+    };
+    
+    this.tick = function() {
     //for every movable object in the world, activate it's movement
 
     // var movables = ["fish", "bubble", "kelp"];
     var movables = ["bubble", "fish", "Gen"];
     
+    //loop through the world
     for(var i = 0; i < this.height; i++) {
       for(var j = 0; j < this.width; j++) {
+        
+        //if it comes across something that matches the movables
         if(movables.indexOf(this.world[i][j].type) !== -1) {
+          
+          
           if(this.world[i][j].status === "dead") {
-            this.world[i][j] = new constructors.Water("water", " ", j, i);
+            // this.world[i][j] = new constructors.Water("water", " ", j, i);
+            this.world[i][j] = new constructors.Water("water", "<img src='images/water.jpg' width='50' height='50'>", j, i);
           } else if(this.world[i][j].type === "Gen") {
             // var ranNum = helpers.getRandomInt(1, 6);
             var ranNum = helpers.getRandomInt(1, 2); //for testing bubble move algorithm
@@ -150,7 +173,9 @@ var constructors = {
           } else {
             this.world[i][j].move(this.world);
           }
+          
         }
+        
       }
     }
     
