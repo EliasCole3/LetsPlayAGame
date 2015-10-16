@@ -26,7 +26,7 @@ var smallWorld;
 $(function() {
 
   //create a world with a height of 12 and a width of 12
-  smallWorld = new constructors.World(15, 30, "world1");
+  smallWorld = new constructors.World(15, 20, "world1");
   
   //fill the world with entities
   smallWorld.fillWorld();
@@ -71,72 +71,135 @@ var constructors = {
     
     this.fillWorld = function() {
       var ranNum = 0;
-      for(var i = 0; i < this.height; i++) {
-        for(var j = 0; j < this.width; j++) {
+      var _this = this;
+      
+      var fillPositionWithObject = function fillPositionWithObject(options) {
+        var x = options.x;
+        var y = options.y;
+        
+        // example default parameter
+        // var width = options.width || 50;
+        
+        switch(options.type) {
+          case "Rock": 
+            _this.world[y][x] = new constructors.Rock("Rock", "<img src='images/rock.jpg' width='50' height='50'>");
+            break;
+           
+          case "Water": 
+            _this.world[y][x] = new constructors.Water("Water", "<img src='images/water.jpg' width='50' height='50'>"); 
+            break;
+            
+          case "BubbleRock": 
+            // _this.world[y][x] = new constructors.BubbleRock("Gen", "<img src='images/bubblerock.jpg' width='50' height='50'>", y, x);
+            _this.world[y][x] = new constructors.BubbleRock("Gen", "<img src='images/bubblerock.jpg' width='50' height='50'>", x, y);
+            break;
+            
+          case "Fish1": 
+            // _this.world[y][x] = new constructors.Fish("Fish", "<img src='images/fish1.jpg' width='50' height='50'>", y, x);
+            _this.world[y][x] = new constructors.Fish("Fish", "<img src='images/fish1.jpg' width='50' height='50'>", x, y);
+            break;
+            
+          case "Fish2": 
+            // _this.world[y][x] = new constructors.Fish("Fish", "<img src='images/fish2.jpg' width='50' height='50'>", y, x);
+            _this.world[y][x] = new constructors.Fish("Fish", "<img src='images/fish2.jpg' width='50' height='50'>", x, y);
+            break;
+            
+          case "Bubble": 
+            // _this.world[y][x] = new constructors.Bubble("bubble", "<img src='images/bubble.png' width='50' height='50'>", y, x);
+            _this.world[y][x] = new constructors.Bubble("bubble", "<img src='images/bubble.png' width='50' height='50'>", x, y);
+            break;
 
-          // if(j > width -2 || i == 0 || j == 0) {
-            // this.world[i][j] = new constructors.Rock("Rock", "#");
-          // } else if(i > height -2 && (ranNum > 2 && ranNum < 11)) {
-            // this.world[i][j] = new constructors.BubbleRock("Gen", "T", j, i);
-          // } else if( i > height -2) {
-            // this.world[i][j] = new constructors.Rock("Rock", "#");
-          // } else if(i < height - 1 && j < width - 1 && ranNum == 1) {
-            // this.world[i][j] = new constructors.Bubble("bubble", "o", j, i);
-          // } else if(i < height - 2 && j < width - 1 && j < width && ranNum == 2) {
-            // this.world[i][j] = new constructors.Fish("fish", "f", j, i);
-          // } else if(i < height - 2 && j < width - 1 && j < width && ranNum == 3) {
-            // this.world[i][j] = new constructors.Fish("fish", "g", j, i);
-          // } else {
-            // this.world[i][j] = new constructors.Water("water", " ", j, i);
-          // }
+          default:
+            _this.world[y][x] = new constructors.Water("Water", "<img src='images/water.jpg' width='50' height='50'>"); 
+        }
+        
+      }
+      
+      //for each object in the world
+      for(var y = 0; y < this.height; y++) {
+        for(var x = 0; x < this.width; x++) {
+          
+          //console.log("x: " + x + ", y: " + y)
 
-          if(j > width -2 || i == 0 || j == 0) {
-            this.world[i][j] = new constructors.Rock("Rock", "<img src='images/rock.jpg' width='50' height='50'>");
-          } else if(i > height -2 && (ranNum > 2 && ranNum < 11)) {
-            this.world[i][j] = new constructors.BubbleRock("Gen", "<img src='images/bubblerock.jpg' width='50' height='50'>", j, i);
-          } else if( i > height -2) {
-            this.world[i][j] = new constructors.Rock("Rock", "<img src='images/rock.jpg' width='50' height='50'>");
-          } else if(i < height - 1 && j < width - 1 && ranNum == 1) {
-            this.world[i][j] = new constructors.Bubble("bubble", "<img src='images/bubble.png' width='50' height='50'>", j, i);
-          } else if(i < height - 2 && j < width - 1 && j < width && ranNum == 2) {
-            this.world[i][j] = new constructors.Fish("fish", "<img src='images/fish1.jpg' width='50' height='50'>", j, i);
-          } else if(i < height - 2 && j < width - 1 && j < width && ranNum == 3) {
-            this.world[i][j] = new constructors.Fish("fish", "<img src='images/fish2.jpg' width='50' height='50'>", j, i);
+          // left border
+          if(x === 0) {
+            fillPositionWithObject({type: "Rock", x: x, y: y});
+            
+          // top border
+          } else if(y === 0) {
+            fillPositionWithObject({type: "Rock", x: x, y: y});
+            
+          // right border
+          } else if(x === this.width - 1) {
+            fillPositionWithObject({type: "Rock", x: x, y: y});
+            
+          // bottom border
+          } else if(y === this.height - 1) {
+            fillPositionWithObject({type: "Rock", x: x, y: y});
+            
+          // everything in the middle
           } else {
-            this.world[i][j] = new constructors.Water("water", "<img src='images/water.jpg' width='50' height='50'>", j, i);
+            fillPositionWithObject({type: "Water", x: x, y: y});
           }
           
-          // hardcoded bubbles for testing
-          // if(i === 5 && j === 5) {
-            // this.world[i][j] = new constructors.Bubble("bubble", "o", j, i);
-          // }
-          // if(i === 4 && j === 5) {
-            // this.world[i][j] = new constructors.Bubble("bubble", "o", j, i);
-          // }
-          // if(i === 3 && j === 5) {
-            // this.world[i][j] = new constructors.Bubble("bubble", "o", j, i);
-          // }
-
-          //hardcoded fish for testing
-          // if(i === 5 && j === 5) {
-            // this.world[i][j] = new constructors.Fish("fish", "f", j, i);
-          // }
-
-          //hardcoded bubbleRock
-          // if(i === 19 && j === 5) {
-            // this.world[i][j] = new constructors.BubbleRock("Gen", "T");
-          // }
-
-          ranNum = helpers.getRandomInt(1, 180);
         }
       }
-    };
+      
+      for(var y = 0; y < this.height; y++) {
+        for(var x = 0; x < this.width; x++) {
+
+          if(ranNum < 10 && y === this.height - 2 && this.world[y][x].type !== "Rock") {
+            fillPositionWithObject({type: "BubbleRock", x: x, y: y});
+          }
+          
+          ranNum = helpers.getRandomInt(1, 100);
+        }  
+      }
+      
+
+      //for each object in the world
+      for(var y = 0; y < this.height; y++) {
+        for(var x = 0; x < this.width; x++) {
+          
+          var obj =  _this.world[y][x];
+          
+          // if object is water
+          if(obj.type === "Water") {
+            
+            //defined random chance of water turning into something else
+            if(ranNum < 5) {
+              fillPositionWithObject({type: "Fish1", x: x, y: y});
+            } else if(ranNum >= 5 && ranNum < 40) {
+              
+            // } else if(ranNum >= 20 && ranNum < 40) {
+              
+            // } else if(ranNum >= 20 && ranNum < 40) {
+              
+            // } else if(ranNum >= 20 && ranNum < 40) {
+              
+            // } else if(ranNum >= 20 && ranNum < 40) {
+              
+            // } else if(ranNum >= 20 && ranNum < 40) {
+              
+            } else {
+              // do nothing, object is already water
+            }
+            
+          }
+
+          ranNum = helpers.getRandomInt(1, 100);
+        }
+      }
+            
+    }; //end of fillWorld()
+    
+    
+    
     
     this.showWorld = function() {
       var htmlString = "";
       htmlString += "<table>";
       
-
       this.world.forEach(function(row) {
         htmlString += "<tr>";
         row.forEach(function(obj) {
@@ -153,25 +216,32 @@ var constructors = {
     //for every movable object in the world, activate it's movement
 
     // var movables = ["fish", "bubble", "kelp"];
-    var movables = ["bubble", "fish", "Gen"];
+    var movables = ["Bubble", "Fish", "Gen"];
     
     //loop through the world
     for(var i = 0; i < this.height; i++) {
       for(var j = 0; j < this.width; j++) {
+        var obj = this.world[i][j];
         
-        //if it comes across something that matches the movables
-        if(movables.indexOf(this.world[i][j].type) !== -1) {
+        //if it comes across something that matches the movables,
+        //return 0, 1, or 2, or -1 if not found
+        if(movables.indexOf(obj.type) !== -1) {
           
-          
-          if(this.world[i][j].status === "dead") {
-            // this.world[i][j] = new constructors.Water("water", " ", j, i);
-            this.world[i][j] = new constructors.Water("water", "<img src='images/water.jpg' width='50' height='50'>", j, i);
-          } else if(this.world[i][j].type === "Gen") {
-            // var ranNum = helpers.getRandomInt(1, 6);
-            var ranNum = helpers.getRandomInt(1, 2); //for testing bubble move algorithm
-            this.world[i][j].spawnBubble(this.world, ranNum, j, i);
+          if(obj.status === "dead") {
+            
+            this.world[i][j] = new constructors.Water("Water", "<img src='images/water.jpg' width='50' height='50'>", j, i);
+            
+          } else if(obj.type === "Gen") {
+            
+            //for more realistic bubbles, the second parameter should be higher
+            var ranNum = helpers.getRandomInt(1, 2); 
+            
+            obj.spawnBubble(this.world, ranNum, j, i);
+            
           } else {
-            this.world[i][j].move(this.world);
+            
+            obj.move(this.world);
+            
           }
           
         }
@@ -205,6 +275,7 @@ var constructors = {
     };
     
     this.move = function(world) {
+      // debugger
       
       if(this.worldCharacter === "pop!") {
         this.animationCount--;
@@ -221,7 +292,7 @@ var constructors = {
         
         //if the space above the bubble is empty
         //@todo: dear god this looks horrific
-        if(aboveType === "water") {
+        if(aboveType === "Water") {
           var randNum = helpers.getRandomInt(1, 20);
           if(randNum === 1) {
             this.pop();
@@ -234,8 +305,7 @@ var constructors = {
           world[this.y-1][this.x] = this;
           
           //fill the old cell with a new water
-          // world[this.y][this.x] = new constructors.Water("water", " ", this.x, this.y);
-          world[this.y][this.x] = new constructors.Water("water", "<img src='images/water.jpg' width='50' height='50'>", this.x, this.y);
+          world[this.y][this.x] = new constructors.Water("Water", "<img src='images/water.jpg' width='50' height='50'>", this.x, this.y);
           
           //adjust the internal bubble location
           this.y--;
@@ -247,28 +317,28 @@ var constructors = {
           var rand = helpers.getRandomInt(1, 2)
 
           if(rand === 1) { //try the left first
-            if(world[this.y-1][this.x-1].type === "water") {
+            if(world[this.y-1][this.x-1].type === "Water") {
               world[this.y-1][this.x-1] = this;
-              world[this.y][this.x] = new constructors.Water("water", "<img src='images/water.jpg' width='50' height='50'>", this.x, this.y);
+              world[this.y][this.x] = new constructors.Water("Water", "<img src='images/water.jpg' width='50' height='50'>", this.x, this.y);
               this.y--;
               this.x--;
-            } else if(world[this.y-1][this.x+1].type === "water") {
+            } else if(world[this.y-1][this.x+1].type === "Water") {
               world[this.y-1][this.x+1] = this; // e.g. world[1][15]
-              world[this.y][this.x] = new constructors.Water("water", "<img src='images/water.jpg' width='50' height='50'>", this.x, this.y);
+              world[this.y][this.x] = new constructors.Water("Water", "<img src='images/water.jpg' width='50' height='50'>", this.x, this.y);
               this.y--;
               this.x++;
             } else {
               //all three spots above the bubble are full, do nothing
             }
           } else { //try the right first
-            if(world[this.y-1][this.x+1].type === "water") {
+            if(world[this.y-1][this.x+1].type === "Water") {
               world[this.y-1][this.x+1] = this;
-              world[this.y][this.x] = new constructors.Water("water", "<img src='images/water.jpg' width='50' height='50'>", this.x, this.y);
+              world[this.y][this.x] = new constructors.Water("Water", "<img src='images/water.jpg' width='50' height='50'>", this.x, this.y);
               this.y--;
               this.x++;
-            } else if(world[this.y-1][this.x-1].type === "water") {
+            } else if(world[this.y-1][this.x-1].type === "Water") {
               world[this.y-1][this.x-1] = this;
-              world[this.y][this.x] = new constructors.Water("water", "<img src='images/water.jpg' width='50' height='50'>", this.x, this.y);
+              world[this.y][this.x] = new constructors.Water("Water", "<img src='images/water.jpg' width='50' height='50'>", this.x, this.y);
               this.y--;
               this.x--;
             } else {
@@ -315,6 +385,9 @@ var constructors = {
         var x = this.x;
         var y = this.y;
         
+        // var x = this.x - 1;
+        // var y = this.y - 1;
+        
         //if the object isn't looking outside of the world
         if(y-1 >= 0) {
           var destinationX = helpers.getRandomInt(x - 1, x + 1);
@@ -322,17 +395,29 @@ var constructors = {
           if(destinationX === 0) destinationX = 5;
           if(destinationY === 0) destinationY = 5;
           
+          
+          // for dev
+          // console.log("Fish")
+          // console.log(world)
+          // console.log("x: " + x)
+          // console.log("y: " + y)
+          // console.log("destinationY: " + destinationY)
+          // console.log("destinationX: " + destinationX)
+          // console.log("world[destinationY][destinationX].type: " + world[destinationY][destinationX].type)
+          // console.log("------------------------------")
+          
+          // var destinationType = world[destinationX][destinationY].type;
           var destinationType = world[destinationY][destinationX].type;
 
           //if the destination doesn't equal the origin
           if(!(x === destinationX && y === destinationY)) {
             switch(destinationType) {
-              case "water":
+              case "Water":
               
                 //abstract this out
                 delete world[destinationY][destinationX];
                 world[destinationY][destinationX] = this;
-                world[y][x] = new constructors.Water("water", "<img src='images/water.jpg' width='50' height='50'>", x, y);
+                world[y][x] = new constructors.Water("Water", "<img src='images/water.jpg' width='50' height='50'>", x, y);
                 
                 //adjust the internal bubble location
                 this.x = destinationX;
@@ -341,10 +426,10 @@ var constructors = {
                 var y = this.y;
                 
                 break;
-              case "bubble":
+              case "Bubble":
               
                 break;
-              case "fish":
+              case "Fish":
               
                 break;
               default:
@@ -394,9 +479,19 @@ var constructors = {
     this.status = "";
     this.animationCount = 2;
     this.spawnBubble = function(world, ranNum, x, y) {
+
+      // for dev
+      // console.log("BubbleRock")
+      // console.log(world)
+      // console.log(this.y-1)
+      // console.log(this.x)
+      // console.log(ranNum)
+      // console.log("------------------------------")
+      
       var aboveType = world[this.y-1][this.x].type;
-      if(aboveType === "water" && ranNum === 1) {
-        world[y - 1][x] = new constructors.Bubble("bubble", "<img src='images/bubble.png' width='50' height='50'>", x, y - 1);
+      // var aboveType = world[this.x][this.y-1].type;
+      if(aboveType === "Water" && ranNum === 1) {
+        world[y - 1][x] = new constructors.Bubble("Bubble", "<img src='images/bubble.png' width='50' height='50'>", x, y - 1);
       }
       else{
       }
