@@ -72,7 +72,6 @@ var constructors = {
     this.fillWorld = function() {
       var ranNum = 0;
       var _this = this;
-      
       var fillPositionWithObject = function fillPositionWithObject(options) {
         var x = options.x;
         var y = options.y;
@@ -81,6 +80,10 @@ var constructors = {
         // var width = options.width || 50;
         
         switch(options.type) {
+          case "Surface":
+           _this.world[y][x] = new constructors.Surface("Surface", "<img src='images/surface.jpg' width='50' height='50'>");
+           break;
+           
           case "Rock": 
             _this.world[y][x] = new constructors.Rock("Rock", "<img src='images/rock.jpg' width='50' height='50'>");
             break;
@@ -125,13 +128,13 @@ var constructors = {
           if(x === 0) {
             fillPositionWithObject({type: "Rock", x: x, y: y});
             
-          // top border
-          } else if(y === 0) {
-            fillPositionWithObject({type: "Rock", x: x, y: y});
-            
           // right border
           } else if(x === this.width - 1) {
             fillPositionWithObject({type: "Rock", x: x, y: y});
+            
+          // top border
+          } else if(y === 0) {
+            fillPositionWithObject({type: "Surface", x: x, y: y});
             
           // bottom border
           } else if(y === this.height - 1) {
@@ -147,13 +150,15 @@ var constructors = {
       
       for(var y = 0; y < this.height; y++) {
         for(var x = 0; x < this.width; x++) {
-
-          if(ranNum < 10 && y === this.height - 2 && this.world[y][x].type !== "Rock") {
+          if(ranNum < 10 && y === this.height - 2 && this.world[y][x].type !== "Rock" ) {
             fillPositionWithObject({type: "BubbleRock", x: x, y: y});
-          }
-          
+          // if (this.world[y][x - 2] !== "BubbleRock" && count < 3 && y === this.height - 2 && this.world[y][x].type !== "Rock") {
+            // console.log(this.world[y][x -2])
+            // fillPositionWithObject({type: "BubbleRock", x: x, y: y});
           ranNum = helpers.getRandomInt(1, 100);
-        }  
+            }  
+
+        }
       }
       
 
@@ -167,10 +172,10 @@ var constructors = {
           if(obj.type === "Water") {
             
             //defined random chance of water turning into something else
-            if(ranNum < 5) {
+            if(ranNum < 2) {
               fillPositionWithObject({type: "Fish1", x: x, y: y});
-            } else if(ranNum >= 5 && ranNum < 40) {
-              
+            } else if(ranNum >= 3 && ranNum < 5) {
+              fillPositionWithObject({type: "Fish2", x: x, y: y});
             // } else if(ranNum >= 20 && ranNum < 40) {
               
             // } else if(ranNum >= 20 && ranNum < 40) {
@@ -271,13 +276,13 @@ var constructors = {
     
     //animation of the bubble popping
     this.pop = function() {
-      this.worldCharacter = "pop!";
+      this.worldCharacter = "<img src='images/bubblepop.jpg' width='50' height='50'>";
     };
     
     this.move = function(world) {
       // debugger
       
-      if(this.worldCharacter === "pop!") {
+      if(this.worldCharacter === "<img src='images/bubblepop.jpg' width='50' height='50'>") {
         this.animationCount--;
       }
       
@@ -309,7 +314,7 @@ var constructors = {
           
           //adjust the internal bubble location
           this.y--;
-        } else if (aboveType === "Rock") {
+        } else if (aboveType === "Surface") {
           this.pop();
         } else { //something other than bubbles and water
 
@@ -360,6 +365,13 @@ var constructors = {
     this.getLocationString = function() {
       return "x: " + this.x + ", y: " + this.y; 
     };
+  },
+  
+  Surface: function(type, worldCharacter) {
+    this.type = type;
+    this.worldCharacter = worldCharacter;
+    this.status = "";
+
   },
   
   Fish: function(type, worldCharacter, xValue, yValue) {
