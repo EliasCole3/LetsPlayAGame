@@ -24,7 +24,7 @@ var smallWorld;
 
 //when the page loads
 $(function() {
-
+ 
   //create a world with a height of 12 and a width of 12
   smallWorld = new constructors.World(15, 20, "world1");
   
@@ -93,23 +93,23 @@ var constructors = {
             break;
             
           case "BubbleRock": 
-            // _this.world[y][x] = new constructors.BubbleRock("Gen", "<img src='images/bubblerock.jpg' width='50' height='50'>", y, x);
             _this.world[y][x] = new constructors.BubbleRock("Gen", "<img src='images/bubblerock.jpg' width='50' height='50'>", x, y);
             break;
             
           case "Fish1": 
-            // _this.world[y][x] = new constructors.Fish("Fish", "<img src='images/fish1.jpg' width='50' height='50'>", y, x);
             _this.world[y][x] = new constructors.Fish("Fish", "<img src='images/fish1.jpg' width='50' height='50'>", x, y);
             break;
             
           case "Fish2": 
-            // _this.world[y][x] = new constructors.Fish("Fish", "<img src='images/fish2.jpg' width='50' height='50'>", y, x);
             _this.world[y][x] = new constructors.Fish("Fish", "<img src='images/fish2.jpg' width='50' height='50'>", x, y);
             break;
             
           case "Bubble": 
-            // _this.world[y][x] = new constructors.Bubble("bubble", "<img src='images/bubble.png' width='50' height='50'>", y, x);
             _this.world[y][x] = new constructors.Bubble("bubble", "<img src='images/bubble.png' width='50' height='50'>", x, y);
+            break;
+            
+          case "Shark": 
+            _this.world[y][x] = new constructors.Shark("Shark", "<img src='images/shark.png' width='50' height='50'>", x, y);
             break;
 
           default:
@@ -177,19 +177,15 @@ var constructors = {
             } else if(ranNum >= 3 && ranNum < 5) {
               fillPositionWithObject({type: "Fish2", x: x, y: y});
             // } else if(ranNum >= 20 && ranNum < 40) {
-              
-            // } else if(ranNum >= 20 && ranNum < 40) {
-              
-            // } else if(ranNum >= 20 && ranNum < 40) {
-              
-            // } else if(ranNum >= 20 && ranNum < 40) {
-              
-            // } else if(ranNum >= 20 && ranNum < 40) {
-              
+                
             } else {
               // do nothing, object is already water
             }
             
+          }
+          
+          if(x === 6 && y === 6) {
+            fillPositionWithObject({type: "Shark", x: x, y: y});
           }
 
           ranNum = helpers.getRandomInt(1, 100);
@@ -221,7 +217,7 @@ var constructors = {
     //for every movable object in the world, activate it's movement
 
     // var movables = ["fish", "bubble", "kelp"];
-    var movables = ["Bubble", "Fish", "Gen"];
+    var movables = ["Bubble", "Fish", "Gen", "Shark"];
     
     //loop through the world
     for(var i = 0; i < this.height; i++) {
@@ -245,7 +241,12 @@ var constructors = {
             
           } else {
             
-            obj.move(this.world);
+            if(obj.type === "Shark") {
+              obj.interact(this.world);
+            } else {
+              obj.move(this.world);
+            }
+            
             
           }
           
@@ -280,7 +281,6 @@ var constructors = {
     };
     
     this.move = function(world) {
-      // debugger
       
       if(this.worldCharacter === "<img src='images/bubblepop.jpg' width='50' height='50'>") {
         this.animationCount--;
@@ -379,8 +379,8 @@ var constructors = {
     this.worldCharacter = worldCharacter;
     this.x = xValue;
     this.y = yValue;
-    var x = this.x;
-    var y = this.y;
+    // var x = this.x;
+    // var y = this.y;
     this.movementCounter = 0;
     
     this.status = "";
@@ -393,12 +393,10 @@ var constructors = {
     };
 
     this.move = function(world) {
+      
       if(this.movementCounter === 4) {
         var x = this.x;
         var y = this.y;
-        
-        // var x = this.x - 1;
-        // var y = this.y - 1;
         
         //if the object isn't looking outside of the world
         if(y-1 >= 0) {
@@ -529,7 +527,133 @@ var constructors = {
     };
   },
   
+  Shark: function(type, worldCharacter, xValue, yValue) {
+    this.type = type;
+    this.worldCharacter = worldCharacter;
+    this.x = xValue;
+    this.y = yValue;
+    this.movementCounter = 0;
+    
+    this.status = "";
+    
+    this.interact = function(world) {
+      
+      if(this.fishIsNearby()) {
+        
+      } else {
+        this.move(world)
+      }
+      
+      //check to see if there's a fish nearby
+      //if there is
+        //move to eat
+        
+        
+        
+        
+      //move to eat
+        //change movement speed
+        //get direction towards fish
+        //move towards fish
+    },
+    
+    this.fishIsNearby = function(world) {
+      var leftUp = {
+        x: this.x - 2,
+        y: this.y - 2
+      }
+      var rightUp = {
+        x: this.x + 2, 
+        y: this.y - 2
+      }
+      var leftDown = {
+        x: this.x - 2, 
+        y: this.y + 2
+      }
+      var rightDown = {
+        x: this.x + 2, 
+        y: this.y + 2
+      }
+      for(var i = leftUp.x; i <= rightUp.x; i++) {
+        for(var j = leftUp.y; j <= leftDown.y; j++) {
+          console.log(i + ", " + j)
+        }
+        
+      }
+
+      // var rightUp = world[this.x + 2][this.y + 2];
+      return false;
+    },
+
+    this.move = function(world) {
+      var x = this.x;
+      var y = this.y;
+      
+      if(this.movementCounter === 4) {
+        
+        //if the object isn't looking outside of the world
+        if(y-1 >= 0) {
+          var destinationX = helpers.getRandomInt(x - 1, x + 1);
+          var destinationY = helpers.getRandomInt(y - 1, y + 1);
+          if(destinationX === 0) destinationX = 5;
+          if(destinationY === 0) destinationY = 5;
+
+          var destinationType = world[destinationY][destinationX].type;
+
+          //if the destination doesn't equal the origin
+          if(!(x === destinationX && y === destinationY)) {
+            switch(destinationType) {
+              case "Water":
+              
+                //abstract this out
+                delete world[destinationY][destinationX];
+                world[destinationY][destinationX] = this;
+                world[y][x] = new constructors.Water("Water", "<img src='images/water.jpg' width='50' height='50'>", x, y);
+                
+                //adjust the internal bubble location
+                this.x = destinationX;
+                this.y = destinationY;
+                var x = this.x;
+                var y = this.y;
+                
+                break;
+              case "Bubble":
+              
+                break;
+              case "Fish":
+              
+                break;
+              default:
+              
+            }
+          }
+        }
+        this.movementCounter = 0;
+      } else {
+        this.movementCounter++;
+      }
+      
+    };
+
+     this.getLocationString = function() {
+      return "x: " + this.x + ", y: " + this.y; 
+    };  
+        
+  },
+  
 }; //end of constructors
+
+
+
+
+
+
+
+
+
+
+
+
 
 var helpers = {
   
